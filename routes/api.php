@@ -18,6 +18,14 @@ Route::post('login', 'Api\AuthController@login');
 Route::post('reset', 'Api\AuthController@reset');
 Route::post('newpassword', 'Api\AuthController@newpassword');
 
+Route::post('registerrestaurant', 'Api\restaurant\AuthController@register');
+Route::post('loginrestaurant', 'Api\restaurant\AuthController@login');
+Route::post('resetrestaurant', 'Api\restaurant\AuthController@reset');
+Route::post('newpasswordrestaurant', 'Api\restaurant\AuthController@newpassword');
+
+
+
+
 
 Route::get('restaurants', 'Api\RestaurantController@index');
 Route::post('restaurants/filter', 'Api\RestaurantController@filter');
