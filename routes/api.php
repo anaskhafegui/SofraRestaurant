@@ -12,6 +12,13 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::post('register', 'Api\AuthController@register');
+Route::post('login', 'Api\AuthController@login');
+Route::post('reset', 'Api\AuthController@reset');
+Route::post('newpassword', 'Api\AuthController@newpassword');
+
+
 Route::get('restaurants', 'Api\RestaurantController@index');
 Route::post('restaurants/filter', 'Api\RestaurantController@filter');
 Route::get('restaurants/show/{id}', 'Api\RestaurantController@show');
@@ -23,6 +30,9 @@ Route::get('restaurants/show/{id}/item', 'Api\RestaurantController@item');
 
 
 Route::group(['middleware' => 'auth:api',], function () {
+
+   
+   
 
     Route::post('restaurants/item/cart', 'Api\RestaurantController@addItemToCart');
     Route::get('restaurants/item/cart', 'Api\RestaurantController@allClientCart');
