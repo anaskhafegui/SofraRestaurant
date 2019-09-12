@@ -1,16 +1,45 @@
 <?php
-namespace App\Http\Controllers\Api;
+
+namespace App\Http\Controllers\Api\Client;
 use App\Http\Controllers\Controller;
-use App\Models\Token;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use App\Token;
+use App\Client;
 use Validator;
 use Response;
-use App\Client;
 use Auth;
 use Mail;
-use Illuminate\Http\Request;
+
 
 class AuthController extends Controller
 {
+    public function addItemToCart(Request $request)
+    {
+        $validation = validator()->make($request->all(), [
+            'item_id'  => 'required|exists:items,id',
+            'quantity' => 'required',
+        ]);
+        if ($validation->fails()) {
+            $data = $validation->errors();
+            return responseJson(0, $validation->errors()->first(), $data);
+        }
+        
+        $item = Item::find($request->item_id);
+
+        $readyItem = [
+            $item->id => [
+                'quantity' => $request->quantity,
+                'price'    => $item->price,
+                'note'     => $request->note
+            ]
+        ];
+
+        $request->user()->cart()->attach($readyItem);
+
+        return responseJson(1, 'تم الاضافة');
+    }
     public function register(Request $request)
     {
         $validation = Validator::make($request->all(), [
@@ -206,7 +235,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function newpassword(Request $request)
+    public function password(Request $request)
     {
         $validation = Validator::make($request->all(), [
             'code' => 'required',
@@ -267,7 +296,9 @@ class AuthController extends Controller
             ], 200);
         }
         Token::where('token',$request->token)->delete();
+       
         auth()->user()->tokens()->create($request->all());
+        
         $data = [
             'status' => 1,
             'msg' => 'تم التسجيل بنجاح',

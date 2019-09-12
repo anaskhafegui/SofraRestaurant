@@ -21,10 +21,8 @@ class CreateRestaurantsTable extends Migration
             $table->integer('city_id');
             $table->string('password');
             $table->integer('delivery_category_id');
-            $table->string('minimumorder');
-            $table->string('deliveryfees');
+            $table->string('delivery_cost');
             $table->text('delivery_days');
-            $table->string('phone');
 			$table->string('whatsapp')->nullable();
 			$table->string('photo')->nullable();
 			$table->enum('availability', array('open', 'closed'));

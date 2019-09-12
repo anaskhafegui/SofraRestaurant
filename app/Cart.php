@@ -6,16 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
-    protected $fillable = array('item_id', 'client_id', 'price', 'quantity','note');
 
-    public function client(){
+    public function clients(){
 
-        return $this->belongsToMany(Client::class,'cart_client');
-        }
+        return $this->belongsToMany('App\Client','cart_client')->withPivot('price', 'quantity', 'note', 'id');
+    }
 
+    public function items() {
 
-    public function payments()
-    {
-        return $this->belongTo('App\PaymentMethod');
-    }    
+		return $this->belongsToMany('App\Item', 'cart_item')->withPivot('price', 'quantity', 'note', 'id');
+    }
 }

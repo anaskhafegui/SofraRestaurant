@@ -1,5 +1,33 @@
 <?php
 
+/**
+ * @param $audience
+ * ex: 'included_segments' => array('All'),
+ * ex: 'include_player_ids' => array("6392d91a-b206-4b7b-a620-cd68e32c3a76",)
+ * @param array $contents
+ * 'en' => 'notification title'
+ * @param $data
+ * optional data as array
+ * @return mixed
+ */
+function notifyByOneSignal($audience = ['included_segments' => array('All')] , $contents = ['en' => ''] , $data = []){
+    return true;
+    // audience include_player_ids
+    $appId = ['app_id' => env('ONE_SIGNAL_APP_ID')];
+    $fields = json_encode((array)$appId + (array)$audience + ['contents' => (array)$contents ] + ['data' => (array)$data]);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+        'Authorization: Basic '.env('ONE_SIGNAL_KEY')));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    return $response;
+}
 
 function notifyByFirebase($title,$body,$tokens,$data = [])        // paramete 5 =>>>> $type
 {
@@ -73,5 +101,14 @@ function responsejson($status,$message,$data = null)
         ];
         return response()->json($response);
     }
+function client()
+{
+    return auth()->guard('client')->user();
+}
+function restaurant()
+{
+    return auth()->guard('restaurant')->user();
+}
+
 ?>
     

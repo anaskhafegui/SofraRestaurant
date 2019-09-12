@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCartClientTable extends Migration
+class CreateDeliveryTimeRestaurantTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateCartClientTable extends Migration
      */
     public function up()
     {
-        Schema::create('cart_client', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('client_id');
-            $table->integer('cart_id');
-            $table->boolean('Confirmed')->defalut(0);
+        Schema::create('delivery_time_restaurant', function(Blueprint $table) {
+            $table->increments('id');
             $table->timestamps();
+            $table->time('restaurant_id');
+            $table->time('delivery_time_id');
         });
     }
 
@@ -29,6 +28,6 @@ class CreateCartClientTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_client');
+        Schema::dropIfExists('delivery_time_restaurant');
     }
 }

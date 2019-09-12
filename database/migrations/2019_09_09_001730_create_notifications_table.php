@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMenulistsTable extends Migration
+class CreateNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateMenulistsTable extends Migration
      */
     public function up()
     {
-        Schema::create('menulists', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->text('content')->nullable();
+            $table->integer('client_id');
             $table->integer('restaurant_id');
-            $table->string('name');
-            $table->text('discription');
-            $table->decimal('price');
-            $table->string('showprice');
-            $table->string('processing-time');
-            $table->string('photo')->nullable();
+            $table->integer('order_id');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class CreateMenulistsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menulists');
+        Schema::dropIfExists('notifications');
     }
 }

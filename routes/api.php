@@ -13,42 +13,50 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('register', 'Api\AuthController@register');
-Route::post('login', 'Api\AuthController@login');
-Route::post('reset', 'Api\AuthController@reset');
-Route::post('newpassword', 'Api\AuthController@newpassword');
+Route::group(['prefix' =>'v1'],function(){
+    Route::get('categories','Api\MainController@categories');
+    Route::get('cities','Api\MainController@cities');
+    Route::get('governorates','Api\MainController@governorates');
+    Route::get('regions_ajax','Api\MainController@ajax_region');
+    Route::get('payment-methods','Api\MainController@paymentMethods');
+    Route::get('categories','Api\MainController@categories');
+    Route::get('restaurants','Api\MainController@restaurants');
+    Route::get('restaurant','Api\MainController@restaurant');
+    Route::get('items','Api\MainController@items');
+    Route::get('restaurant/reviews','Api\MainController@reviews');
+    Route::get('offers','Api\MainController@offers');
+    Route::get('offer','Api\MainController@offer');
+    Route::post('contact','Api\MainController@contact');
 
-Route::post('registerrestaurant', 'Api\restaurant\AuthController@register');
-Route::post('loginrestaurant', 'Api\restaurant\AuthController@login');
-Route::post('resetrestaurant', 'Api\restaurant\AuthController@reset');
-Route::post('newpasswordrestaurant', 'Api\restaurant\AuthController@newpassword');
+  Route::group(['prefix' =>'client'],function(){
 
+    Route::post('register', 'Api\Client\AuthController@register');
+    Route::post('login', 'Api\Client\AuthController@login');
+    Route::post('profile', 'Api\Client\AuthController@profile');
+    Route::post('reset-password', 'Api\Client\AuthController@reset');
+    Route::post('new-password', 'Api\Client\AuthController@password');
 
+  Route::group(['middleware'=>'auth:api'],function(){
 
-
-
-Route::get('restaurants', 'Api\RestaurantController@index');
-Route::post('restaurants/filter', 'Api\RestaurantController@filter');
-Route::get('restaurants/show/{id}', 'Api\RestaurantController@show');
-Route::post('restaurants/show/{id}/reviews', 'Api\RestaurantController@review');
-Route::get('restaurants/show/{id}/item', 'Api\RestaurantController@item');
-
-
-
-
-
-Route::group(['middleware' => 'auth:api',], function () {
+        Route::post('profile', 'Api\Client\AuthController@profile');
+        Route::post('register-token', 'Api\Client\AuthController@registerToken');
+        Route::post('remove-token', 'Api\Client\AuthController@removeToken');
+        Route::post('add-item-to-cart','Api\Client\MainController@addItemToCart');
+        Route::post('delete-item-from-cart','Api\Client\MainController@deleteItemFromCart');
+        Route::post('delete-all-cart-items','Api\Client\MainController@deleteAllCartItems');
+        Route::post('update-cart-item','Api\Client\MainController@updateCartItem');
+        Route::get('get-cart-items','Api\Client\MainController@cartItems');
+        Route::post('new-order','Api\Client\MainController@newOrder');
+        Route::get('my-orders','Api\Client\MainController@myOrders');
+        Route::get('show-order','Api\Client\MainController@showOrder');
+        Route::get('latest-order','Api\Client\MainController@latestOrder');
+        Route::post('confirm-order','Api\Client\MainController@confirmOrder');
+        Route::post('decline-order','Api\Client\MainController@declineOrder');
+        Route::post('restaurant/review','Api\Client\MainController@review');
+        Route::get('notifications','Api\Client\MainController@notifications');
+        });
+    }); 
 
    
-   
 
-    Route::post('restaurants/item/cart', 'Api\RestaurantController@addItemToCart');
-    Route::get('restaurants/item/cart', 'Api\RestaurantController@allClientCart');
-    Route::put('restaurants/item/cart/{id}', 'Api\RestaurantController@updateItemToCart');
-    Route::delete('restaurants/item/cart/{id}', 'Api\RestaurantController@removeItemFromCart');
-    Route::put('restaurants/item/cart/{id}/confirmed', 'Api\RestaurantController@ConfirmedCart');
-
-
-    Route::post('restaurants/item/cart', 'Api\RestaurantController@PaymentMethod');
-  
 });
