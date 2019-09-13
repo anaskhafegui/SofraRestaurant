@@ -35,16 +35,24 @@ return [
     |
     */
 
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+        'guards' => [
+            'web' => [
+                'driver' => 'session',
+                'provider' => 'users',
+            ],
 
         'api' => [
             'driver' => 'token',
             'provider' => 'clients',
-            // 'hash' => false,
+        ],
+        'client' => [
+            'driver' => 'token',
+            'provider' => 'clients',
+        ],
+
+        'restaurant' => [
+            'driver' => 'token',
+            'provider' => 'restaurants',
         ],
     ],
 
@@ -74,6 +82,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Client::class,
         ],
+        'restaurants' => [
+            'driver' => 'eloquent',
+            'model' => App\Restaurant::class,
+        ],
+
 
         // 'users' => [
         //     'driver' => 'database',

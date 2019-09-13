@@ -20,8 +20,8 @@ class AuthController extends Controller
             'email'           => 'required|unique:restaurants,email',
             'password'        => 'required|confirmed',
             'phone'           => 'required',
-            'deliveryfees'   => 'required|numeric',
-            'minimumorder' => 'required|numeric',
+            'delivery_cost'   => 'required|numeric',
+            'minimum_charger' => 'required|numeric',
             'whatsapp'        => 'required',
             'availability'    => 'required',
             'city_id'       => 'required',
@@ -34,9 +34,13 @@ class AuthController extends Controller
             return responseJson(0, $validation->errors()->first(), $data);
         }
         $userToken = str_random(60);
+
         $request->merge(array('api_token' => $userToken));
         $request->merge(array('password' => bcrypt($request->password)));
+
+        
         $user = Restaurant::create($request->all());
+
         if ($request->has('categories')) {
             $user->categories()->sync($request->categories);
         }
@@ -49,6 +53,7 @@ class AuthController extends Controller
             $logo->move($destinationPath, $name); // uploading file to given path
             $user->update(['photo' => 'uploads/restaurants/' . $name]);
         }
+        dd($user);
         if ($user) {
             $data = [
                 'api_token' => $userToken,
@@ -118,7 +123,7 @@ class AuthController extends Controller
         }
         $request->user()->save();
         $data = [
-            'restaurant' => $request->user()->load('city','categories')
+            'restaurant' => $request->user()->load('city.governorate','categories')
         ];
         return responseJson(1, 'تم تحديث البيانات', $data);
     }

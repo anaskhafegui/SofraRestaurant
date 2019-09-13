@@ -12,6 +12,7 @@ use App\Item;
 use App\Restaurant;
 use App\Order;
 use App\Notification;
+use App\Setting;
 
 class MainController extends Controller
 {
@@ -52,7 +53,7 @@ class MainController extends Controller
         if ($request->has('items')) {
             $counter = 0;
             foreach ($request->items as $itemId) {
-
+//ask
                 $item = Item::find($itemId);
                 $order->items()->attach([
                 $itemId => [
@@ -69,13 +70,18 @@ class MainController extends Controller
         if ($cost >= $restaurant->minimum_charger) {
             $total = $cost + $delivery_cost; // 200 SAR
             
-         /*   $commission = 
-             $net = $total - */
+            $commission = settings()->commission * $cost;
 
+            dd($commission);
+            $net = $total - settings()->commission;
+
+            dd($total);
             $update = $order->update([
                      'cost'          => $cost,
                      'delivery_cost' => $delivery_cost,
-                     'total'         => $total
+                     'total'         => $total,
+                     'commission'    => $commission,
+                     'net'           =>$net
                  ]);
 
            $notification = Notification::create([
@@ -119,12 +125,15 @@ class MainController extends Controller
 
     public function myOrders(Request $request)
     {
+    
         $orders = $request->user()->orders()->where(function ($order) use ($request) {
+           if($request->state == 'confirmed'){
+           
             if ($request->has('state') && $request->state == 'completed') {
                 $order->where('state', '!=', 'pending');
             } elseif ($request->has('state') && $request->state == 'current') {
                 $order->where('state', '=', 'pending');
-            }
+            }}
         })->with('items','restaurant.city','restaurant.categories','client')->latest()->paginate(20);
         return responseJson(1, 'تم التحميل', $orders);
     }
@@ -150,6 +159,14 @@ class MainController extends Controller
         $order = $request->user()->orders()->find($request->order_id);
         if (!$order) {
             return responseJson(0, 'لا يمكن الحصول على البيانات');
+        }
+        if ($order->state == 'pending')
+        {
+            return responseJson(1,'برجاء انتظار الموافقة من المطعم');
+        }
+        if ($order->state != 'confirmed')
+        {
+            return responseJson(1,'لا يمكن قبول طلب تم مسبقا');
         }
        /*if ($order->state == 'rejected') {
             return responseJson(0, 'لا يمكن تأكيد استلام الطلب ، لم يتم قبول الطلب');
@@ -189,12 +206,15 @@ class MainController extends Controller
         if (!$order) {
             return responseJson(0, 'لا يمكن الحصول على البيانات');
         }
-        /*if ($order->state != 'accepted') {
-            return responseJson(0, 'لا يمكن رفض استلام الطلب ، لم يتم قبول الطلب');
+        if ($order->state == 'pending')
+        {
+            return responseJson(1,'برجاء انتظار الموافقة من المطعم');
         }
-        if ($order->delivery_confirmed_by_client == -1) {
-            return responseJson(1, 'تم رفض استلام الطلب');
-        }*/
+        if ($order->state != 'confirmed')
+        {
+            return responseJson(1,'لا يمكن قبول طلب تم مسبقا');
+        }
+       
         $order->update(['state' => 'declined']);
         $restaurant = $order->restaurant;
        
@@ -256,20 +276,12 @@ class MainController extends Controller
             'review' => $review->load('client','restaurant')
         ]);
     }
+    
 
     public function notifications(Request $request)
     {
-        //$notifications = $request->user()->notifications()->with('order.client.city','order.restaurant.city')->latest()->paginate(20); //
-        //$notifications = $request->user()->notifications()->with('order.client.city','order.restaurant.city')->latest()->paginate(20);
-        $ordersid = $request->user()->notifications()
-            ->whereHas('order', function ($q) use ($request) {
-                    $q->where('orders.delivery_confirmed_by_client', 1);
-                })->pluck('id')->toArray();
-
-                $notifications = Notification::where('order_id',$ordersid)->get();
-
-                dd($notifications);
+        $notifications = $request->user()->notifications()->with('order.client.city','order.restaurant.city')->latest()->paginate(20);
         return responseJson(1, 'تم التحميل', $notifications);
     }
-
+    
 }

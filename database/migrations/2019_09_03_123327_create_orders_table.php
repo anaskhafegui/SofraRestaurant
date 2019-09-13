@@ -25,9 +25,7 @@ class CreateOrdersTable extends Migration
 			$table->datetime('need_delivery_at');
 			$table->integer('delivery_time_id');
 			$table->datetime('delivered_at')->nullable();
-			$table->enum('state', array('pending', 'accepted', 'rejected'));
-			$table->boolean('delivery_confirmed_by_restaurant')->default(0);
-			$table->boolean('delivery_confirmed_by_client')->default(0);
+			$table->enum('state', array('confirmed','pending', 'accepted', 'rejected','declined', 'delivered'));
 		    $table->timestamps();
         });
     }

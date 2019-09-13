@@ -15,7 +15,6 @@ class Setting extends Model
 		'commission',
 		'about_app',
 		'terms',
-        'commissions_text',
-        'bank_accounts'
 	);
+
 }

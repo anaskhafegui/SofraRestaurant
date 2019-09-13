@@ -110,5 +110,27 @@ function restaurant()
     return auth()->guard('restaurant')->user();
 }
 
+function settings()
+{
+    $settings =  \App\Setting::find(1);
+    
+    if ($settings)
+    {
+        return $settings;
+    }else{
+        return new \App\Setting;
+    }
+}
+function page($id)
+{
+    $page =  \App\Page::find($id);
+    if ($page)
+    {
+        return $page;
+    }else{
+        return new \App\Page;
+    }
+}
+
 ?>
     

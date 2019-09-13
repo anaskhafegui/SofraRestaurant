@@ -20,7 +20,7 @@ class CreateItemsTable extends Migration
             $table->text('discription');
             $table->decimal('price');
             $table->string('showprice');
-            $table->string('processing-time');
+            $table->string('preparing_time');
             $table->string('photo')->nullable();
             $table->timestamps();
             $table->boolean('disabled')->default(0);

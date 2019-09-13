@@ -8,7 +8,7 @@ class Notification extends Model
 {
     protected $table = 'notifications';
     public $timestamps = true;
-    protected $fillable = array('title','content','order_id','restaurant_id','client_id');
+    protected $fillable = array('title','content','order_id','user_id');
 
 
     public function order()
@@ -22,5 +22,11 @@ class Notification extends Model
     public function client()
     {
         return $this->belongTo('App\Client');
+    }
+
+
+    public function notifiable()
+    {
+        return $this->morphTo();
     }
 }

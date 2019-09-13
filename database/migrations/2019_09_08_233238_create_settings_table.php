@@ -14,8 +14,13 @@ class CreateSettingsTable extends Migration
     public function up()
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->increments('id');
+            $table->string('facebook');
+            $table->string('twitter');
+            $table->string('instagram');
+            $table->float('commission');
+            $table->longText('about_app');
+            $table->longText('terms');
         });
     }
 

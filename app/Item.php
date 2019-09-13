@@ -8,7 +8,7 @@ class Item extends Model
 {
     protected $table = 'items';
 	public $timestamps = true;
-	protected $fillable = array('name', 'description', 'price', 'preparing_time', 'photo','disabled');
+	protected $fillable = array('restaurant_id','name', 'discription', 'price','showprice', 'preparing_time', 'photo','disabled');
     protected $appends = ['photo_url'];
 
 
@@ -22,11 +22,11 @@ class Item extends Model
 		return $this->belongsToMany('App\Order','item_order');
 	}
 
-
     public function scopeEnabled($q)
     {
         return $q->where('disabled',0);
-	}
+    }
+    
     public function getPhotoUrlAttribute($value)
     {
         return url($this->photo);
