@@ -14,9 +14,9 @@
     <li><a href="https://github.com/Zizaco/entrust">Admin-Panel LTE</a></li>
 </ul>
 
-### Sofra-restaurant-flow
+### Sofra-flow
 
-   ![flow](https://github.com/anaskhafegui/SofraRestaurant/issues/1#issue-493521506)
+   ![flow](https://user-images.githubusercontent.com/25870922/64895313-72b0f800-d67c-11e9-9f25-291a5051d6fe.jpg)
    
 ### Details
     o Registration as Client or as Restaurant
