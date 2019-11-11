@@ -1,8 +1,8 @@
-## BloodBank
+## SofraRestaurant
 
 ### Introduction
 
-   Application make connection between Donation-requests and donators more easily,donator can select notify by select may city or blood type using FCM notify
+   Application make connection between cookers and sellers more easliy
     
 ### Technology
 
@@ -14,9 +14,18 @@
     <li><a href="https://github.com/Zizaco/entrust">Admin-Panel LTE</a></li>
 </ul>
 
-### BloodBank-flow
+### Sofra-restaurant-flow
 
-   ![flow](https://user-images.githubusercontent.com/25870922/64386492-93a09a00-d039-11e9-99ee-c38267ea2abc.jpg)
+   ![flow](https://github.com/anaskhafegui/SofraRestaurant/issues/1#issue-493521506)
+   
+### Details
+    o Registration as Client or as Restaurant
+    o Idea is anyone can do home cook and sales this cook and also make offers
+    o Client can filter by restaurant name or city to get the nearest restaurant
+    o Client can select order and also review the restaurant
+    o Restaurants receives client’s orders by notification -FCM
+    o When the restaurant accepts client responses the client receives notify also
+    o Admin-panel LTE
 
 ## Contributing
 
